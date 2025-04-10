@@ -27,6 +27,15 @@ try {
       res.status(500).json({ error: "Failed to fetch books" });
     }
   });
+
+app.post("/api/books", async (req, res) => {
+  try {
+    const result = await booksCollection.insertOne(req.body);
+    res.status(201).json({ id: result.insertedId });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add book" });
+  }
+});
   
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
