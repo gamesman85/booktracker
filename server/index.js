@@ -1,5 +1,5 @@
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -34,6 +34,18 @@ app.post("/api/books", async (req, res) => {
     res.status(201).json({ id: result.insertedId });
   } catch (error) {
     res.status(500).json({ error: "Failed to add book" });
+  }
+});
+
+app.put("/api/books/:id", async (req, res) => {
+  try {
+    await booksCollection.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: req.body }
+    );  
+    res.json({ message: "Book item updated" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update book" });
   }
 });
   
