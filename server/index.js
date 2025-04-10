@@ -48,6 +48,15 @@ app.put("/api/books/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to update book" });
   }
 });
+
+app.delete("/api/books/:id", async (req, res) => {
+  try {
+    await booksCollection.deleteOne({ _id: new ObjectId(req.params.id) });
+    res.json({ message: "Book deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete book" });
+  }
+});
   
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
