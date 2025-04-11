@@ -1,27 +1,28 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from "react";
+import BookList from "./components/BookList";
+import "./App.css";
 
 function App() {
+  const [data, setData] = useState([]);
+
   useEffect(() => {
     async function fetchBooks() {
       try {
-        const response = await fetch('/api/books')
-        const data = await response.json()
-        console.log('Books fetched successfully:')
-        console.log(data)
+        const response = await fetch("/api/books");
+        const data = await response.json();
+        setData(data);
       } catch (error) {
-        console.error('Error fetching books:', error)
+        console.error("Error fetching books:", error);
       }
     }
-    
-    fetchBooks()
-  }, [])
+    fetchBooks();
+  }, []);
 
   return (
     <div>
-      <h1>Backend Test</h1>
-      <p>Check console for API results</p>
+      <BookList books={data} />
     </div>
   )
 }
 
-export default App 
+export default App;
