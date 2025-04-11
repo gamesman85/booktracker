@@ -7,6 +7,7 @@ import "./App.css";
 function App() {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
+  const [activeLibrary, setActiveLibrary] = useState(null);
 
   useEffect(() => {
     async function fetchBooks() {
@@ -22,20 +23,28 @@ function App() {
     fetchBooks();
   }, []);
 
-  function handleFilterChange(library) {
-    if (library === null) {
+  useEffect(() => {
+    if (activeLibrary === null) {
       setFilteredBooks(books);
     } else {
-      setFilteredBooks(books.filter(book => book.library === library));
+      setFilteredBooks(books.filter(book => book.library === activeLibrary));
     }
+  }, [books, activeLibrary]);
+
+  function handleChangeFilter(library) {
+    setActiveLibrary(library);
+  }
+
+  function handleAddBook(newBook) {
+    setBooks([...books, newBook]);
   }
 
   return (
     <div>
       <h1>Book Tracker</h1>
-      <LibraryFilter books={books} onFilterChange={handleFilterChange} />
+      <LibraryFilter books={books} onFilterChange={handleChangeFilter} />
       <BookList books={filteredBooks} />
-      <BookAdder onAddBook={(newBook) => setBooks([...books, newBook])} />
+      <BookAdder onAddBook={handleAddBook} />
     </div>
   );
 }

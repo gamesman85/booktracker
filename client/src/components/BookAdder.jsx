@@ -3,12 +3,19 @@ import axios from 'axios';
 function BookAdder({ onAddBook }) {
   async function addBookAction(formData) {
     try {
-      const response = await axios.post('/api/books', {
+      const bookData = {
         title: formData.get("title"),
         library: formData.get("library"),
-      });
+      };
       
-      onAddBook(response.data);
+      const response = await axios.post('/api/books', bookData);
+      
+      const newBook = {
+        _id: response.data.id,
+        ...bookData
+      };
+      
+      onAddBook(newBook);
       
     } catch (error) {
       console.error("Error adding book:", error.message);
