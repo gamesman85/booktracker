@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import BookList from "./components/BookList";
 import LibraryFilter from "./components/LibraryFilter";
+import BookAdder from "./components/BookAdder";
 import "./App.css";
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
       <h1>Book Tracker</h1>
       <LibraryFilter books={books} onFilterChange={handleFilterChange} />
       <BookList books={filteredBooks} />
+      <BookAdder onAddBook={(newBook) => setBooks([...books, newBook])} />
     </div>
   );
 }
