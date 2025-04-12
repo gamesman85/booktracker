@@ -8,6 +8,7 @@ function BookList({ books }) {
               <th>ID</th>
               <th>Title</th>
               <th>Library</th>
+              <th>Due Date</th>
             </tr>
           </thead>
           <tbody>
@@ -16,6 +17,7 @@ function BookList({ books }) {
                 <td>{book._id}</td>
                 <td>{book.title}</td>
                 <td>{book.library}</td>
+                <td>{book.dueDate}</td>
               </tr>
             ))}
           </tbody>

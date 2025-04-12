@@ -6,6 +6,7 @@ function BookAdder({ onAddBook }) {
       const bookData = {
         title: formData.get("title"),
         library: formData.get("library"),
+        dueDate: formData.get("dueDate"),
       };
       
       const response = await axios.post('/api/books', bookData);
@@ -26,6 +27,7 @@ function BookAdder({ onAddBook }) {
     <form action={addBookAction}>
       <input type="text" name="title" required placeholder="Book title" />
       <input type="text" name="library" required placeholder="Library name" />
+      <input type="date" name="dueDate" required placeholder="Due date" />
       <button type="submit">Add Book</button>
     </form>
   );
