@@ -39,11 +39,16 @@ function App() {
     setBooks([...books, newBook]);
   }
 
+  function handleBooksDeleted(deletedBookIds) {{
+    const updatedBooks = books.filter(book => !deletedBookIds.includes(book._id));
+    setBooks(updatedBooks);
+  }}
+
   return (
     <div>
       <h1>Book Tracker</h1>
       <LibraryFilter books={books} onFilterChange={handleChangeFilter} />
-      <BookList books={filteredBooks} />
+      <BookList books={filteredBooks} onBooksDeleted={handleBooksDeleted}/>
       <BookAdder onAddBook={handleAddBook} />
     </div>
   );
