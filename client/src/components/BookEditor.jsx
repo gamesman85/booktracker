@@ -1,38 +1,52 @@
-import { useState } from 'react';
+import axios from 'axios';
 
 function BookEditor({ book, onSave, onCancel }) {
-  const [formData, setFormData] = useState({
-    title: book.title,
-    library: book.library,
-    dueDate: book.dueDate
-  });
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  // Guard clause
+  if (!book) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Error</h2>
+          <p>Book data could not be loaded.</p>
+          <button onClick={onCancel}>Close</button>
+        </div>
+      </div>
+    );
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    onSave(book._id, formData);
+  // This is the correct way to handle form submissions in React 19
+  async function updateBookAction(formData) {
+    // Create a try/catch block to handle errors
+    try {
+      // Extract form values using FormData API
+      const bookData = {
+        title: formData.get("title"),
+        library: formData.get("library"),
+        dueDate: formData.get("dueDate")
+      };
+      
+      // Make the API call
+      await axios.put(`/api/books/${book._id}`, bookData);
+      
+      // Call the callback to update the UI
+      onSave(book._id, bookData);
+    } catch (error) {
+      console.error("Error updating book:", error);
+    }
   }
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Edit Book</h2>
-        <form onSubmit={handleSubmit}>
+        <form action={updateBookAction}>
           <div>
             <label htmlFor="title">Title:</label>
             <input 
               type="text" 
               id="title" 
               name="title" 
-              value={formData.title} 
-              onChange={handleChange} 
+              defaultValue={book.title || ""} 
               required 
             />
           </div>
@@ -43,8 +57,7 @@ function BookEditor({ book, onSave, onCancel }) {
               type="text" 
               id="library" 
               name="library" 
-              value={formData.library} 
-              onChange={handleChange} 
+              defaultValue={book.library || ""} 
               required 
             />
           </div>
@@ -55,8 +68,7 @@ function BookEditor({ book, onSave, onCancel }) {
               type="date" 
               id="dueDate" 
               name="dueDate" 
-              value={formData.dueDate} 
-              onChange={handleChange} 
+              defaultValue={book.dueDate || ""} 
               required 
             />
           </div>
